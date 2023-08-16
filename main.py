@@ -34,7 +34,7 @@ cursor.execute('''
 
 def display_pie_chart(amounts):
     fig1, ax1 = plt.subplots()
-    ax1.pie(amounts, labels=categories, startangle=90)
+    ax1.pie(amounts, labels=categories, startangle=90, colors=['#79155B', '#C23373'])
     ax1.legend()
     st.pyplot(fig1)
 
@@ -42,7 +42,6 @@ def display_pie_chart(amounts):
 if st.button('Add'):
     cursor.execute('INSERT INTO expenses (category, amount, shop, date) VALUES (?, ?, ?, ?)', (category, amount, shop, date))
     conn.commit()
-    st.success('Expense added successfully!')
 
     # Display expenses
     st.header('Expenses this month')
