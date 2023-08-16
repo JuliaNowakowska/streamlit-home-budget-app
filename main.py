@@ -35,6 +35,7 @@ cursor.execute('''
 def display_pie_chart(amounts):
     fig1, ax1 = plt.subplots()
     ax1.pie(amounts, labels=categories, startangle=90)
+    ax1.legend()
     st.pyplot(fig1)
 
 
