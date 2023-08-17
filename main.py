@@ -35,8 +35,9 @@ cursor.execute('''
 def display_pie_chart(amounts):
     fig1, ax1 = plt.subplots()
     explode = (0.15, 0)
-    ax1.pie(amounts, explode=explode, labels=categories, shadow=True, startangle=90, colors=['#79155B', '#C23373'],
-            autopct='%1.1f%%')
+    labels = [f"{category}: {amount}\N{euro sign}" for category, amount in zip(categories, amounts)]
+    ax1.pie(amounts, explode=explode, labels=labels, shadow=True, startangle=90, colors=['#79155B', '#C23373'],
+            autopct=lambda p: '{:.0f}%'.format(p, p * sum(amounts) / 100))
     ax1.legend()
     st.pyplot(fig1)
 
