@@ -34,32 +34,34 @@ cursor.execute('''
 
 def display_pie_chart(amounts):
     fig1, ax1 = plt.subplots()
-    ax1.pie(amounts, labels=categories, startangle=90, colors=['#79155B', '#C23373'])
+    explode = (0.15, 0)
+    ax1.pie(amounts, explode=explode, labels=categories, shadow=True, startangle=90, colors=['#79155B', '#C23373'],
+            autopct='%1.1f%%')
     ax1.legend()
     st.pyplot(fig1)
 
+st.header('Expenses this month')
 
 if st.button('Add'):
     cursor.execute('INSERT INTO expenses (category, amount, shop, date) VALUES (?, ?, ?, ?)', (category, amount, shop, date))
     conn.commit()
 
-    # Display expenses
-    st.header('Expenses this month')
-    cursor.execute('''SELECT * 
-                    FROM expenses 
-                    WHERE category = 'food' ''')
-    expenses_food = cursor.fetchall()
+# Display expenses
+cursor.execute('''SELECT * 
+                FROM expenses 
+                WHERE category = 'food' ''')
+expenses_food = cursor.fetchall()
 
-    cursor.execute('''SELECT * 
+cursor.execute('''SELECT * 
                     FROM expenses 
                     WHERE category = 'flat' ''')
-    expenses_flat = cursor.fetchall()
+expenses_flat = cursor.fetchall()
 
-    sum_food = sum(expense[2] for expense in expenses_food)
-    sum_flat = sum(expense[2] for expense in expenses_flat)
-    amounts = [sum_food, sum_flat]
+sum_food = sum(expense[2] for expense in expenses_food)
+sum_flat = sum(expense[2] for expense in expenses_flat)
+amounts = [sum_food, sum_flat]
 
-    display_pie_chart(amounts)
+display_pie_chart(amounts)
 
 
 
