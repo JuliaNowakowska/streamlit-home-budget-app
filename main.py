@@ -1,6 +1,7 @@
 import streamlit as st
 import sqlite3
 import matplotlib.pyplot as plt
+import numpy as np
 
 conn = sqlite3.connect('budget.db')
 cursor = conn.cursor()
@@ -43,10 +44,14 @@ def display_pie_chart(amounts):
     ax1.legend(labels=labels)
     st.pyplot(fig1)
 
-def display_line_chart(x, y):
-    fig1, ax1 = plt.subplots()
-    ax1.plot(x, y)
-    st.pyplot(fig1)
+def display_line_chart(timeline_dictionary):
+    if timeline_dictionary is not []:
+        x = sorted(timeline_dictionary)
+        y = [timeline_dictionary[i] for i in x]
+        fig1, ax1 = plt.subplots()
+        ax1.plot(x, y)
+        plt.xticks(rotation=90)
+        st.pyplot(fig1)
 
 
 
@@ -73,17 +78,19 @@ cursor.execute('''SELECT *
                     FROM expenses''')
 expenses = cursor.fetchall()
 
-
-timeline = []
-amounts_y = []
+timeline_amounts = {}
 
 for expense in expenses:
-    timeline.append(expense[4])
-    amounts_y.append(expense[2])
+    if expense[4] not in timeline_amounts.keys():
+        timeline_amounts[expense[4]] = expense[2]
+    else:
+        timeline_amounts[expense[4]] += expense[2]
 
 
-display_pie_chart(amounts)
-display_line_chart(timeline, amounts_y)
+if amounts != [0, 0]:
+    display_pie_chart(amounts)
+if timeline_amounts:
+    display_line_chart(timeline_amounts)
 
 
 
