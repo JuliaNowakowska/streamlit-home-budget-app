@@ -3,6 +3,8 @@ import sqlite3
 import matplotlib.pyplot as plt
 import numpy as np
 
+st.set_page_config(layout="wide")
+
 conn = sqlite3.connect('budget.db')
 cursor = conn.cursor()
 
@@ -55,7 +57,7 @@ def display_line_chart(timeline_dictionary):
 
 
 
-st.header('Expenses this month')
+
 
 
 
@@ -86,11 +88,20 @@ for expense in expenses:
     else:
         timeline_amounts[expense[4]] += expense[2]
 
-
-if amounts != [0, 0]:
-    display_pie_chart(amounts)
-if timeline_amounts:
-    display_line_chart(timeline_amounts)
+with col1:
+    st.text(" ")
+    st.text(" ")
+    st.text(" ")
+    st.header('Expenses this month')
+    if amounts != [0, 0]:
+        display_pie_chart(amounts)
+with col2:
+    st.text(" ")
+    st.text(" ")
+    st.text(" ")
+    st.text(" ")
+    if timeline_amounts:
+        display_line_chart(timeline_amounts)
 
 
 
