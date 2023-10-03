@@ -18,6 +18,12 @@ def display_line_chart(timeline_dictionary):
         y = [timeline_dictionary[i] for i in x]
 
         fig1, ax1 = plt.subplots()
-        ax1.plot(x, y)
+        ax1.plot(x, y, color='#79155B')
         plt.xticks(rotation=90)
+        ax1.set_ylabel('Summarized expenses (\N{euro sign})')
+        ax1.yaxis.grid(which='major', linestyle='--', color='gray', alpha=0.7)
+        ax1.plot(x, y, marker='o', linestyle='-', color='#79155B', label='Line Label')
+        for i, j in zip(x, y):
+            ax1.annotate(str(j), (i, j), textcoords="offset points", xytext=(0, 10), ha='center')
+
         st.pyplot(fig1)
