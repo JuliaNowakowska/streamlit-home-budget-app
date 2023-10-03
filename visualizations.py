@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
+from datetime import datetime
 
 def display_pie_chart(amounts, categories):
     fig1, ax1 = plt.subplots()
@@ -14,8 +15,25 @@ def display_pie_chart(amounts, categories):
 
 def display_line_chart(timeline_dictionary):
     if timeline_dictionary is not []:
-        x = sorted(timeline_dictionary)
-        y = [timeline_dictionary[i] for i in x]
+        dates = [datetime.strptime(date, "%Y-%m-%d") for date in timeline_dictionary.keys()]
+        # Group data by month and calculate the sum of expenses for each month
+        monthly_summary = {}
+        for date, expense in zip(dates, timeline_dictionary.values()):
+            month_year = date.strftime("%b %Y")
+            if month_year not in monthly_summary:
+                monthly_summary[month_year] = 0
+            monthly_summary[month_year] += expense
+
+        # Extract sorted month-year labels and corresponding sums
+        # Sort the month-year labels in chronological order
+        sorted_months = sorted(monthly_summary.keys(), key=lambda x: datetime.strptime(x, "%b %Y"))
+
+        # Extract sorted month-year labels and corresponding sums
+        x = sorted_months
+        y = [monthly_summary[i] for i in x]
+
+        #x = sorted(timeline_dictionary)
+        #y = [timeline_dictionary[i] for i in x]
 
         fig1, ax1 = plt.subplots()
         ax1.plot(x, y, color='#79155B')
@@ -25,5 +43,4 @@ def display_line_chart(timeline_dictionary):
         ax1.plot(x, y, marker='o', linestyle='-', color='#79155B', label='Line Label')
         for i, j in zip(x, y):
             ax1.annotate(str(j), (i, j), textcoords="offset points", xytext=(0, 10), ha='center')
-
         st.pyplot(fig1)
