@@ -1,7 +1,7 @@
 import streamlit as st
 import sqlite3
 from database import create_expense, fetch_expenses, initialize_database
-from visualizations import display_pie_chart, display_line_chart
+from visualizations import display_pie_chart, display_line_chart, display_pie_filter
 
 categories = ["food", "flat"]
 
@@ -22,6 +22,7 @@ def main():
         date = st.date_input("When?")
         if st.button('Add'):
             create_expense(cursor, conn, category, amount, shop, date)
+
 
 
     expenses_food = fetch_expenses(cursor, 'food')
@@ -48,6 +49,9 @@ def main():
         st.text(" ")
         st.text(" ")
         st.header('Expenses')
+        date_filter = st.selectbox("", ["All time", "Jan 2023", "Feb 2023"])
+        if date_filter:
+            display_pie_filter(expenses, date_filter)
         if amounts != [0, 0]:
             display_pie_chart(amounts, categories)
     with col2:

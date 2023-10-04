@@ -4,6 +4,7 @@ import streamlit as st
 from datetime import datetime
 
 def display_pie_chart(amounts, categories):
+    print(amounts)
     fig1, ax1 = plt.subplots()
     explode = (0.15, 0)
     labels = [f"{category}: {amount}\N{euro sign}" for category, amount in zip(categories, amounts)]
@@ -12,6 +13,9 @@ def display_pie_chart(amounts, categories):
     ax1.legend(labels=labels)
     st.pyplot(fig1)
 
+def display_pie_filter(expenses, filter):
+    sum_expenses_food = sum(expense[2] for expense in expenses if expense[1] == 'food')
+    sum_expenses_flat = sum(expense[2] for expense in expenses if expense[1] == 'flat')
 
 def display_line_chart(timeline_dictionary):
     if timeline_dictionary is not []:
@@ -31,9 +35,6 @@ def display_line_chart(timeline_dictionary):
         # Extract sorted month-year labels and corresponding sums
         x = sorted_months
         y = [monthly_summary[i] for i in x]
-
-        #x = sorted(timeline_dictionary)
-        #y = [timeline_dictionary[i] for i in x]
 
         fig1, ax1 = plt.subplots()
         ax1.plot(x, y, color='#79155B')
