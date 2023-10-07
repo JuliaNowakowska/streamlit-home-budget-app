@@ -23,8 +23,6 @@ def main():
         if st.button('Add'):
             create_expense(cursor, conn, category, amount, shop, date)
 
-
-
     expenses_food = fetch_expenses(cursor, 'food')
     expenses_flat = fetch_expenses(cursor, 'flat')
 
@@ -44,16 +42,19 @@ def main():
         else:
             timeline_amounts[expense[4]] += expense[2]
 
+
     with col1:
         st.text(" ")
         st.text(" ")
         st.text(" ")
         st.header('Expenses')
-        date_filter = st.selectbox("", ["All time", "Jan 2023", "Feb 2023"])
+        date_filter = st.selectbox("", ["All time", "2023-01", "2023-02", "2023-03", "2023-04",
+                                        "2023-05", "2023-06", "2023-07", "2023-08", "2023-09",
+                                        "2023-10", "2023-11"])
         if date_filter:
             display_pie_filter(expenses, date_filter)
-        if amounts != [0, 0]:
-            display_pie_chart(amounts, categories)
+        #if amounts != [0, 0]:
+        #    display_pie_chart(amounts, categories)
     with col2:
         st.text(" ")
         st.text(" ")
@@ -61,8 +62,6 @@ def main():
         st.text(" ")
         if timeline_amounts:
             display_line_chart(timeline_amounts)
-
-
 
 if __name__ == "__main__":
     main()

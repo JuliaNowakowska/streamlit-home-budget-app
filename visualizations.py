@@ -3,8 +3,15 @@ import seaborn as sns
 import streamlit as st
 from datetime import datetime
 
-def display_pie_chart(amounts, categories):
-    print(amounts)
+def display_pie_filter(expenses, filter):
+    if filter == "" or filter == "All time":
+        sum_expenses_food = sum(expense[2] for expense in expenses if expense[1] == 'food')
+        sum_expenses_flat = sum(expense[2] for expense in expenses if expense[1] == 'flat')
+    else:
+        sum_expenses_food = sum(expense[2] for expense in expenses if expense[1] == 'food' and expense[4][:7] == filter)
+        sum_expenses_flat = sum(expense[2] for expense in expenses if expense[1] == 'flat' and expense[4][:7] == filter)
+    amounts = [sum_expenses_food, sum_expenses_flat]
+    categories = ["food", "flat"]
     fig1, ax1 = plt.subplots()
     explode = (0.15, 0)
     labels = [f"{category}: {amount}\N{euro sign}" for category, amount in zip(categories, amounts)]
@@ -13,9 +20,6 @@ def display_pie_chart(amounts, categories):
     ax1.legend(labels=labels)
     st.pyplot(fig1)
 
-def display_pie_filter(expenses, filter):
-    sum_expenses_food = sum(expense[2] for expense in expenses if expense[1] == 'food')
-    sum_expenses_flat = sum(expense[2] for expense in expenses if expense[1] == 'flat')
 
 def display_line_chart(timeline_dictionary):
     if timeline_dictionary is not []:
@@ -40,6 +44,7 @@ def display_line_chart(timeline_dictionary):
         ax1.plot(x, y, color='#79155B')
         plt.xticks(rotation=90)
         ax1.set_ylabel('Summarized expenses (\N{euro sign})')
+        ax1.set_ylim(0,max(y)+50)
         ax1.yaxis.grid(which='major', linestyle='--', color='gray', alpha=0.7)
         ax1.plot(x, y, marker='o', linestyle='-', color='#79155B', label='Line Label')
         for i, j in zip(x, y):
