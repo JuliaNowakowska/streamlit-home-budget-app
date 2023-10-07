@@ -1,7 +1,7 @@
 import streamlit as st
 import sqlite3
 from database import create_expense, fetch_expenses, initialize_database
-from visualizations import display_pie_chart, display_line_chart, display_pie_filter
+from visualizations import display_line_chart, display_pie_filter
 
 categories = ["food", "flat"]
 
