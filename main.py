@@ -1,7 +1,6 @@
 import streamlit as st
-import sqlite3
 from database import create_expense, fetch_expenses, initialize_database
-from visualizations import display_pie_chart, display_line_chart, display_pie_filter
+from visualizations import display_line_chart, display_pie_filter, bar_plot_shops
 
 categories = ["food", "flat"]
 
@@ -53,8 +52,7 @@ def main():
                                         "2023-10", "2023-11"])
         if date_filter:
             display_pie_filter(expenses, date_filter)
-        #if amounts != [0, 0]:
-        #    display_pie_chart(amounts, categories)
+            bar_plot_shops(expenses)
     with col2:
         st.text(" ")
         st.text(" ")
@@ -62,6 +60,7 @@ def main():
         st.text(" ")
         if timeline_amounts:
             display_line_chart(timeline_amounts)
+
 
 if __name__ == "__main__":
     main()

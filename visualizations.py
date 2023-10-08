@@ -50,3 +50,15 @@ def display_line_chart(timeline_dictionary):
         for i, j in zip(x, y):
             ax1.annotate(str(j), (i, j), textcoords="offset points", xytext=(0, 10), ha='center')
         st.pyplot(fig1)
+
+def bar_plot_shops(expenses):
+    shops = [expense[3] for expense in expenses]
+    shops_expenses = {}
+
+    for shop in shops:
+        shops_expenses[shop] = sum(expense[2] for expense in expenses if expense[3] == shop)
+
+    fig1, ax1 = plt.subplots()
+    ax1.bar(shops_expenses.keys(), shops_expenses.values())
+    #ax1.legend(labels=labels)
+    st.pyplot(fig1)
