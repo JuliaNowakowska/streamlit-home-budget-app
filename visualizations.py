@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import seaborn as sns
+import numpy as np
 import streamlit as st
 from datetime import datetime
 
@@ -53,12 +53,42 @@ def display_line_chart(timeline_dictionary):
 
 def bar_plot_shops(expenses):
     shops = [expense[3] for expense in expenses]
-    shops_expenses = {}
+    shops = list(set(shops))
+    months = [expense[4][:7] for expense in expenses if expense[4][:7]]
+    months = sorted(list(set(months)))
 
-    for shop in shops:
-        shops_expenses[shop] = sum(expense[2] for expense in expenses if expense[3] == shop)
+    monthly_summary = {}
 
-    fig1, ax1 = plt.subplots()
-    ax1.bar(shops_expenses.keys(), shops_expenses.values())
-    #ax1.legend(labels=labels)
-    st.pyplot(fig1)
+    for month in months:
+        monthly_summary[month] = []
+        for shop in shops:
+            amount = sum(expense[2] for expense in expenses if expense[3] == shop and expense[4][:7] == month)
+            monthly_summary[month].append(amount)
+
+    shop_all_values = {}
+    for i in range(len(shops)):
+        shop_all_values[shops[i]] = []
+        for val in monthly_summary.values():
+            shop_all_values[shops[i]].append(val[i])
+        shop_all_values[shops[i]] = tuple(shop_all_values[shops[i]])
+
+    x = np.arange(len(months))  # the label locations
+    width = 0.25  # the width of the bars
+    multiplier = 0
+
+    fig, ax = plt.subplots(layout='constrained')
+
+    for attribute, measurement in shop_all_values.items():
+        offset = width * multiplier
+        rects = ax.bar(x + offset, measurement, width, label=attribute)
+        ax.bar_label(rects, padding=3)
+        multiplier += 1
+
+    # Add some text for labels, title and custom x-axis tick labels, etc.
+    ax.set_ylabel('Amount of money (euro)')
+    ax.set_title('Expenses by shops')
+    ax.set_xticks(x + width, months)
+    plt.xticks(rotation=90)
+    ax.legend(loc='upper left')
+    ax.set_ylim(0, 250)
+    st.pyplot(fig)

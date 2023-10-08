@@ -7,7 +7,7 @@ categories = ["food", "flat"]
 def main():
     conn, cursor = initialize_database()
 
-    st.set_page_config(layout="wide")
+    #st.set_page_config(layout="wide")
     st.title("Home Budget app")
 
     col1, col2 = st.columns(2)
